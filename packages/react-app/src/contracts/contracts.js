@@ -1,1 +1,1 @@
-module.exports = ["SuperswapV1ERC20","SuperswapV1Factory","SuperswapV1Pair","YourContract"];
+module.exports = ["SuperswapV1ERC20","SuperswapV1Factory","SuperswapV1Pair","SuperswapV1Router","YourContract"];

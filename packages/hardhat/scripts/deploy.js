@@ -14,6 +14,11 @@ const main = async () => {
   const superswapFactory = await deploy("SuperswapV1Factory", [
     "0xCc0a50A8b447B3305C13f29bd0aE6b7745b3137B"
   ]); // <-- add in constructor args like line 19 vvvv
+  const weth = await deploy("contracts/test/WETH9.sol:WETH9"); // <-- add in constructor args like line 19 vvvv
+  const superswapRouter = await deploy("SuperswapV1Router", [
+    superswapFactory.address,
+    weth.address
+  ]); // <-- add in constructor args like line 19 vvvv
 
   // const yourContract = await ethers.getContractAt('YourContract', "0xaAC799eC2d00C013f1F11c37E654e59B0429DF6A") //<-- if you want to instantiate a version of a contract at a specific address!
   // const secondContract = await deploy("SecondContract")
