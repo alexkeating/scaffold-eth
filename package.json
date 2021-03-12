@@ -60,5 +60,8 @@
   },
   "dependencies": {
     "@uniswap/lib": "^4.0.1-alpha"
+  },
+  "devDependencies": {
+    "ts-node": "^9.1.1"
   }
 }
