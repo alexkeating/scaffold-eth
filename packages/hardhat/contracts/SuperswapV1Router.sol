@@ -8,6 +8,7 @@ import './uniswap/interfaces/IERC20.sol';
 import './uniswap/interfaces/IWETH.sol';
 import './libraries/SuperswapV1Library.sol';
 import './libraries/SafeMath.sol';
+import "hardhat/console.sol";
 
 contract SuperswapV1Router is IUniswapV2Router02 {
     using SafeMath for uint;

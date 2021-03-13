@@ -19,3 +19,10 @@ is taken from the uniswap oracle.
 
 - Next step is to copy the uniswap contracts and tests
 - As well as to
+
+## Extra info
+
+#### Testing
+
+- Testing is based on the uniswap tests. We have all the core tests\
+  and only the V2 router requests.

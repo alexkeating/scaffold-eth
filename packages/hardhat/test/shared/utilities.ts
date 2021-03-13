@@ -11,6 +11,8 @@ const {
 
 import { Web3Provider } from "@ethersproject/providers";
 
+export const MINIMUM_LIQUIDITY = BigNumber.from(10).pow(3);
+
 const PERMIT_TYPEHASH = keccak256(
   toUtf8Bytes(
     "Permit(address owner,address spender,uint256 value,uint256 nonce,uint256 deadline)"
