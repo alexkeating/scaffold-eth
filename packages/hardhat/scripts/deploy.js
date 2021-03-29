@@ -4,6 +4,15 @@ const chalk = require("chalk");
 const { config, ethers, tenderly, run } = require("hardhat");
 const { utils } = require("ethers");
 const R = require("ramda");
+const deployFramework = require("@superfluid-finance/ethereum-contracts/scripts/deploy-framework");
+const deployTestToken = require("@superfluid-finance/ethereum-contracts/scripts/deploy-test-token");
+const deploySuperToken = require("@superfluid-finance/ethereum-contracts/scripts/deploy-super-token");
+const Web3 = require("web3");
+const SuperfluidSDK = require("@superfluid-finance/js-sdk");
+
+const errorHandler = err => {
+  if (err) throw err;
+};
 
 const main = async () => {
   console.log("\n\n 📡 Deploying...\n");
@@ -18,6 +27,42 @@ const main = async () => {
   const superswapRouter = await deploy("SuperswapV1Router", [
     superswapFactory.address,
     weth.address
+  ]); // <-- add in constructor args like line 19 vvvv
+  // Deploy host
+  // I will copy the contracts in and put the path
+  // const superHost = await deploy("SuperswapApp", []); // <-- add in constructor args like line 19 vvvv
+  // Deploy IConstantFlowAgreement
+  // ISuperToken
+  const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
+  const [deployer, ad1, ad2] = await web3.eth.getAccounts();
+  await deployFramework(errorHandler, { web3 });
+  await deployTestToken(errorHandler, [":", "fDAI"], {
+    web3,
+    from: deployer
+  });
+  await deploySuperToken(errorHandler, [":", "fDAI"], {
+    web3,
+    from: deployer
+  });
+
+  // Set up superfluid
+  const sf = new SuperfluidSDK.Framework({
+    web3,
+    version: "test",
+    tokens: ["fDAI"]
+  });
+  await sf.initialize();
+  const contracts = await sf.contracts;
+  const superTokenAddr = await sf.tokens.fDAI.address;
+  const hostAddr = await sf.host.address;
+  const cfaAddr = await sf.agreements.cfa.address;
+
+  // Superswap app
+  const superswapApp = await deploy("SuperswapApp", [
+    hostAddr,
+    cfaAddr,
+    superTokenAddr,
+    superswapFactory.address
   ]); // <-- add in constructor args like line 19 vvvv
 
   // const yourContract = await ethers.getContractAt('YourContract', "0xaAC799eC2d00C013f1F11c37E654e59B0429DF6A") //<-- if you want to instantiate a version of a contract at a specific address!
